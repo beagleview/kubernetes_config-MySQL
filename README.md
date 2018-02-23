@@ -1,1 +1,1 @@
-# kubernetes_config-MySQL
+# script for create app on kubernetes
