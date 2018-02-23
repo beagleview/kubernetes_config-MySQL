@@ -26,6 +26,7 @@ spec:
       storage: 5Gi
 ---
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: student-mysql
   labels:
