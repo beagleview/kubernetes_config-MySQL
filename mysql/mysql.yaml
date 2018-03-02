@@ -1,23 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: student-mysql
-  labels:
-    app: student
+  name: studentdb
 spec:
   ports:
-    - port: 3306
+  - port: 3306
   selector:
-    app: student
-    tier: mysql
+    app: studentdb
   clusterIP: None
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
-  labels:
-    app: student
+  name: studentdb-pv-claim
 spec:
   accessModes:
     - ReadWriteOnce
@@ -25,41 +20,35 @@ spec:
     requests:
       storage: 5Gi
 ---
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
-apiVersion: apps/v1beta1
 metadata:
-  name: student-mysql
-  labels:
-    app: student
+  name: studentdb
 spec:
   selector:
     matchLabels:
-      app: student
-      tier: mysql
+      app: studentdb
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: student
-        tier: mysql
+        app: studentdb
     spec:
       containers:
-      - image: mysql
-        name: mysql
+      - image: mariadb
+        name: studentdb
         env:
+          # Use secret in real usage
         - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-pass
-              key: password
+          value: password
         ports:
         - containerPort: 3306
-          name: mysql
+          name: studentdb
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: studentdb-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: studentdb-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: studentdb-pv-claim
