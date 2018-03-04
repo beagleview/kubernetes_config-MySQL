@@ -9,7 +9,6 @@ spec:
     targetPort: 9376
   selector:
     app: studentdb
-  clusterIP: None
   type: LoadBalancer
 ---
 apiVersion: v1
