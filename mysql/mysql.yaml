@@ -4,10 +4,13 @@ metadata:
   name: studentdb
 spec:
   ports:
-  - port: 3306
+  - protocol: TCP
+  port: 3306
+  targetPort: 9376
   selector:
     app: studentdb
   clusterIP: None
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
