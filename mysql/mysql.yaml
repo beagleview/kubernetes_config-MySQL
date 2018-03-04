@@ -5,8 +5,8 @@ metadata:
 spec:
   ports:
   - protocol: TCP
-  port: 3306
-  targetPort: 9376
+    port: 3306
+    targetPort: 9376
   selector:
     app: studentdb
   clusterIP: None
