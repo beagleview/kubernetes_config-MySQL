@@ -6,7 +6,7 @@ spec:
   ports:
   - protocol: TCP
     port: 3306
-    targetPort: 9376
+    targetPort: 3306
   selector:
     app: studentdb
   type: LoadBalancer
