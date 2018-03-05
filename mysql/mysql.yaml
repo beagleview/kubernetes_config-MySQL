@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: studentdb
+  name: mariadb
 spec:
   ports:
   - port: 3306
     targetPort: 3306
   selector:
-    app: studentdb
+    app: mariadb
   type: LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: studentdb-pv-claim
+  name: mariadb-pv-claim
 spec:
   accessModes:
     - ReadWriteOnce
@@ -24,32 +24,32 @@ spec:
 apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: studentdb
+  name: mariadb
 spec:
   selector:
     matchLabels:
-      app: studentdb
+      app: mariadb
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: studentdb
+        app: mariadb
     spec:
       containers:
       - image: mariadb
-        name: studentdb
+        name: mariadb
         env:
           # Use secret in real usage
         - name: MYSQL_ROOT_PASSWORD
           value: testdb1
         ports:
         - containerPort: 3306
-          name: studentdb
+          name: mariadb
         volumeMounts:
-        - name: studentdb-persistent-storage
+        - name: mariadb-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: studentdb-persistent-storage
+      - name: mariadb-persistent-storage
         persistentVolumeClaim:
-          claimName: studentdb-pv-claim
+          claimName: mariadb-pv-claim
